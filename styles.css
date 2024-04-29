@@ -1,0 +1,56 @@
+/* General body and casino table styling */
+body {
+    background: url('blackjack table.webp') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Arial', sans-serif;
+    color: white;
+}
+
+/* Card dealing animation */
+@keyframes dealCard {
+    0% {
+        left: 50%; /* Center horizontally at the start */
+        top: 20%; /* Positioned a bit lower from the top at the start */
+    }
+    100% {
+        left: var(--deal-left); /* Adjusted via JS */
+        top: var(--deal-top); /* Adjusted via JS */
+    }
+}
+
+/* Apply the animation */
+.dealt {
+    animation: dealCard 0.6s forwards;
+}
+
+/* Button styling */
+.button {
+    background: #b85c38;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0px 5px #ffffff;
+}
+
+.button:hover {
+    background-color: #ffffff;
+}
+.card {
+    width: 100px; /* Adjust based on your needs */
+    height: 140px; /* Adjust based on your needs */
+    background: url('cards.png') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    display: inline-block;
+    font-size: 20px; /* Adjust based on your needs */
+    color: rgb(243, 243, 243); /* Change based on suit */
+    text-align: center;
+    line-height: 140px; /* Same as height to vertically center */
+}
+
+.card .suit {
+    font-size: 14px; /* Smaller font for the suit */
+}

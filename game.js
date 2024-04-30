@@ -3,6 +3,7 @@ let dealerCards = [];
 let playerScore = 0;
 let dealerScore = 0;
 let isGameOver = false;
+let coins = 10;  // Starting coins
 
 const playerScoreSpan = document.getElementById('player-score');
 const dealerScoreSpan = document.getElementById('dealer-score');
@@ -12,53 +13,72 @@ const btnHit = document.getElementById('btnHit');
 const btnStand = document.getElementById('btnStand');
 const btnNewGame = document.getElementById('btnNewGame');
 const resultDiv = document.getElementById('result');
+const coinsDiv = document.getElementById('coins');  // Display coins
 
-
+function updateCoinsDisplay() {
+    coinsDiv.textContent = 'Coins: ' + coins;
+}
 
 function checkForEndOfGame() {
     if (playerScore >= 21 || dealerScore >= 17) {
         isGameOver = true;
         btnHit.disabled = true;
         btnStand.disabled = true;
+        let winAmount = 0;
         if (playerScore === 21) {
             resultDiv.textContent = "You've got Blackjack!";
+            winAmount = 2;
         } else if (playerScore > 21) {
             resultDiv.textContent = "You're bust!";
         } else if (dealerScore > 21) {
             resultDiv.textContent = "Dealer busts. You win!";
+            winAmount = 2;
         } else if (dealerScore === 21) {
             resultDiv.textContent = "Dealer has Blackjack. You lose.";
         } else if (playerScore > dealerScore) {
             resultDiv.textContent = "You win!";
+            winAmount = 2;
         } else {
             resultDiv.textContent = "You lose!";
         }
+        coins += winAmount;
+        updateCoinsDisplay();
     }
 }
 
 function newGame() {
-    playerCards = [getRandomCard(), getRandomCard()];
-    dealerCards = [getRandomCard(), getRandomCard()];
-    isGameOver = false;
-    btnHit.disabled = false;
-    btnStand.disabled = false;
-    resultDiv.textContent = '';
-    updateGameArea();
+    if (coins > 0) {
+        coins -= 1; // Bet 1 coin to start a game
+        playerCards = [getRandomCard(), getRandomCard()];
+        dealerCards = [getRandomCard()];
+        isGameOver = false;
+        btnHit.disabled = false;
+        btnStand.disabled = false;
+        resultDiv.textContent = '';
+        updateGameArea();
+        updateCoinsDisplay();
+    } else {
+        alert("You're out of coins!");
+    }
 }
 
 btnHit.addEventListener('click', function() {
-    playerCards.push(getRandomCard());
-    updateGameArea();
-    checkForEndOfGame();
+    if (!isGameOver) {
+        playerCards.push(getRandomCard());
+        updateGameArea();
+        checkForEndOfGame();
+    }
 });
 
 btnStand.addEventListener('click', function() {
-    while (dealerScore < 17) {
-        dealerCards.push(getRandomCard());
-        updateScores();
+    if (!isGameOver) {
+        while (dealerScore < 17) {
+            dealerCards.push(getRandomCard());
+            updateScores();
+        }
+        updateGameArea();
+        checkForEndOfGame();
     }
-    updateGameArea();
-    checkForEndOfGame();
 });
 
 btnNewGame.addEventListener('click', newGame);
@@ -69,12 +89,21 @@ newGame();
 function getRandomCard() {
     const suits = ['♥', '♦', '♣', '♠']; // Using suit symbols
     const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-    const valueIndex = Math.floor(Math.random() * 13);
-    const suitIndex = Math.floor(Math.random() * 4);
-    const cardValue = valueIndex >= 9 ? 10 : valueIndex + 1;
+    const valueIndex = Math.floor(Math.random() * values.length);
+    const suitIndex = Math.floor(Math.random() * suits.length);
+    let cardValue;
+
+    if (values[valueIndex] === 'J' || values[valueIndex] === 'Q' || values[valueIndex] === 'K') {
+        cardValue = 10;
+    } else if (values[valueIndex] === 'A') {
+        cardValue = 11; // Here, you might adjust based on the current score later
+    } else {
+        cardValue = parseInt(values[valueIndex]);
+    }
+
     const cardSuit = suits[suitIndex];
     const cardText = values[valueIndex] + cardSuit;
-    return { cardValue: cardValue, cardText: cardText, suitColor: 'white' };
+    return { cardValue: cardValue, cardText: cardText, suitColor: (cardSuit === '♥' || cardSuit === '♦') ? 'white' : 'white' };
 }
 
 function updateScores() {
@@ -91,14 +120,14 @@ function updateGameArea() {
         const cardDiv = document.createElement('div');
         cardDiv.className = 'card';
         cardDiv.style.color = card.suitColor;
-        cardDiv.textContent = card.cardText; // Ensure only the text is set here
+        cardDiv.textContent = card.cardText;
         playerCardsDiv.appendChild(cardDiv);
     });
     dealerCards.forEach(card => {
         const cardDiv = document.createElement('div');
         cardDiv.className = 'card';
         cardDiv.style.color = card.suitColor;
-        cardDiv.textContent = card.cardText; // Ensure only the text is set here
+        cardDiv.textContent = card.cardText;
         dealerCardsDiv.appendChild(cardDiv);
     });
     updateScores();

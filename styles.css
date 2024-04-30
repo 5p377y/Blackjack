@@ -4,17 +4,19 @@ body {
     background-size: cover;
     font-family: 'Arial', sans-serif;
     color: white;
+    display: flex;
+    justify-content: center; /* Centers content horizontally */
+    align-items: center; /* Centers content vertically */
+    height: 100vh; /* Full viewport height */
 }
 
 /* Card dealing animation */
 @keyframes dealCard {
     0% {
-        left: 50%; /* Center horizontally at the start */
-        top: 20%; /* Positioned a bit lower from the top at the start */
+        transform: translateX(-50%); /* Start from center and spread out */
     }
     100% {
-        left: var(--deal-left); /* Adjusted via JS */
-        top: var(--deal-top); /* Adjusted via JS */
+        transform: translateX(calc(var(--deal-left) - 50%)); /* End position adjusted via JS */
     }
 }
 
@@ -38,19 +40,23 @@ body {
 .button:hover {
     background-color: #ffffff;
 }
+
 .card {
-    width: 100px; /* Adjust based on your needs */
-    height: 140px; /* Adjust based on your needs */
+    width: 70px; /* Adjust based on your needs */
+    height: 100px; /* Adjust based on your needs */
     background: url('cards.png') no-repeat center center;
     background-size: cover;
     position: relative;
     display: inline-block;
     font-size: 20px; /* Adjust based on your needs */
-    color: rgb(243, 243, 243); /* Change based on suit */
+    color: white; /* Ensured text is white */
     text-align: center;
-    line-height: 140px; /* Same as height to vertically center */
+    line-height: 100px; /* Adjusted to match card height for better centering */
+    margin: 0 10px; /* Space out cards */
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; /* Black outline for text */
 }
 
 .card .suit {
     font-size: 14px; /* Smaller font for the suit */
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; /* Black outline for text */
 }

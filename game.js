@@ -3,7 +3,7 @@ let dealerCards = [];
 let playerScore = 0;
 let dealerScore = 0;
 let isGameOver = false;
-let coins = 10;  // Starting coins
+let Balance = 100;
 
 const playerScoreSpan = document.getElementById('player-score');
 const dealerScoreSpan = document.getElementById('dealer-score');
@@ -13,53 +13,10 @@ const btnHit = document.getElementById('btnHit');
 const btnStand = document.getElementById('btnStand');
 const btnNewGame = document.getElementById('btnNewGame');
 const resultDiv = document.getElementById('result');
-const coinsDiv = document.getElementById('coins');  // Display coins
+const BalanceDiv = document.getElementById('Balance');  // Display Balance
 
-function updateCoinsDisplay() {
-    coinsDiv.textContent = 'Coins: ' + coins;
-}
-
-function checkForEndOfGame() {
-    if (playerScore >= 21 || dealerScore >= 17) {
-        isGameOver = true;
-        btnHit.disabled = true;
-        btnStand.disabled = true;
-        let winAmount = 0;
-        if (playerScore === 21) {
-            resultDiv.textContent = "You've got Blackjack!";
-            winAmount = 2;
-        } else if (playerScore > 21) {
-            resultDiv.textContent = "You're bust!";
-        } else if (dealerScore > 21) {
-            resultDiv.textContent = "Dealer busts. You win!";
-            winAmount = 2;
-        } else if (dealerScore === 21) {
-            resultDiv.textContent = "Dealer has Blackjack. You lose.";
-        } else if (playerScore > dealerScore) {
-            resultDiv.textContent = "You win!";
-            winAmount = 2;
-        } else {
-            resultDiv.textContent = "You lose!";
-        }
-        coins += winAmount;
-        updateCoinsDisplay();
-    }
-}
-
-function newGame() {
-    if (coins > 0) {
-        coins -= 1; // Bet 1 coin to start a game
-        playerCards = [getRandomCard(), getRandomCard()];
-        dealerCards = [getRandomCard()];
-        isGameOver = false;
-        btnHit.disabled = false;
-        btnStand.disabled = false;
-        resultDiv.textContent = '';
-        updateGameArea();
-        updateCoinsDisplay();
-    } else {
-        alert("You're out of coins!");
-    }
+function updateBalanceDisplay() {
+    BalanceDiv.textContent = 'Balance: ' + Balance;
 }
 
 btnHit.addEventListener('click', function() {
@@ -132,3 +89,66 @@ function updateGameArea() {
     });
     updateScores();
 }
+const betInput = document.getElementById('betInput');
+const btnBet = document.getElementById('btnBet');
+
+function placeBet() {
+    const betAmount = parseInt(betInput.value);
+    if (betAmount > 0 && betAmount <= Balance) {
+        Balance -= betAmount; // Subtract bet amount from balance
+        newGame(betAmount);
+        btnBet.disabled = true; // Disable bet button after placing a bet
+        betInput.disabled = true; // Disable changing the bet after the game starts
+    } else {
+        alert("Invalid bet amount or insufficient balance.");
+    }
+}
+
+function newGame(betAmount) {
+    playerCards = [getRandomCard(), getRandomCard()];
+    dealerCards = [getRandomCard()];
+    isGameOver = false;
+    btnHit.disabled = false;
+    btnStand.disabled = false;
+    resultDiv.textContent = '';
+    updateGameArea();
+    updateBalanceDisplay();
+}
+
+function checkForEndOfGame() {
+    if (playerScore >= 21 || dealerScore >= 17) {
+        isGameOver = true;
+        btnHit.disabled = true;
+        btnStand.disabled = true;
+        let winAmount = 0;
+        const betAmount = parseInt(betInput.value);
+        if (playerScore === 21) {
+            resultDiv.textContent = "You've got Blackjack!";
+            winAmount = betAmount * 2;
+        } else if (playerScore > 21) {
+            resultDiv.textContent = "You're bust!";
+        } else if (dealerScore > 21) {
+            resultDiv.textContent = "Dealer busts. You win!";
+            winAmount = betAmount * 2;
+        } else if (dealerScore === 21) {
+            resultDiv.textContent = "Dealer has Blackjack. You lose.";
+        } else if (playerScore > dealerScore) {
+            resultDiv.textContent = "You win!";
+            winAmount = betAmount * 2;
+        } else {
+            resultDiv.textContent = "You lose!";
+        }
+        Balance += winAmount;
+        updateBalanceDisplay();
+        btnBet.disabled = false; // Enable bet button for next game
+        betInput.disabled = false; // Enable bet input for next game
+    }
+}
+
+btnBet.addEventListener('click', placeBet);
+
+// Initially disable game buttons until a bet is placed
+btnHit.disabled = true;
+btnStand.disabled = true;
+btnNewGame.disabled = true;
+updateBalanceDisplay();

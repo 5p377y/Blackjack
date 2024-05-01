@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blackjack Game</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="game-container">
         <h2>Blackjack</h2>
-        <div id="coins">Coins: 10</div> <!-- Added Coins display -->
+        <div id="Balance">Balance: 100</div> <!-- Added Balance display -->
         <div class="scoreboard">
             <div class="score" id="dealer-score">Dealer Score: 0</div>
             <div class="score" id="player-score">Player Score: 0</div>
@@ -22,8 +23,19 @@
         <button id="btnStand">Stand</button>
         <button id="btnNewGame">New Game</button>
         <div id="result"></div>
+        <div id="bettingControls">
+            <label for="betInput">Bet Amount:</label>
+            <input id="betInput" type="number" value="1" min="1" max="100">
+            <button id="btnBet">Place Bet</button>
+        </div>
+        <a href="https://venmo.com/u/Zach-Sperry-1" id="venmoButton" target="_blank" title="Pay me on Venmo">
+            <i class="fas fa-wallet"></i> Pay on Venmo
+        </a>
+        
+
     </div>
     <script src="game.js"></script>
 </body>
 </html>
+
 

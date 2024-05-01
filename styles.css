@@ -8,7 +8,9 @@ body {
     justify-content: center; /* Centers content horizontally */
     align-items: center; /* Centers content vertically */
     height: 100vh; /* Full viewport height */
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
+
 
 /* Card dealing animation */
 @keyframes dealCard {
@@ -60,3 +62,54 @@ body {
     font-size: 14px; /* Smaller font for the suit */
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; /* Black outline for text */
 }
+#bettingControls {
+    position: absolute;
+    top: 570px;
+    right: 150px; /* Positions the container at the top right */
+    background-color: #f4f4f400; /* Light grey background for visibility */
+    border: 1px solid #fff8f8; /* Subtle border */
+    padding: 10px;
+    border-radius: 5px; /* Rounded corners for a softer look */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Adds a slight shadow for depth */
+}
+
+/* Styling for input and button for consistency */
+#betInput, #btnBet {
+    font-size: 16px;
+    padding: 5px 10px;
+    margin-right: 5px; /* Adds space between the input and the button */
+}
+
+#btnBet {
+    color: white;
+    background-color: #ff0000; /* Bootstrap's primary blue */
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#btnBet:hover {
+    background-color: #010305; /* Darker blue on hover for interactive feel */
+}
+#venmoButton {
+    position: absolute;
+    top: 0px;
+    left: 0px; /* Adjust according to your layout */
+    text-decoration: none;
+    color: #3d95ce; /* Venmo color */
+    font-size: 16px;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #3d95ce;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between icon and text */
+}
+
+#venmoButton:hover {
+    background-color: #3d95ce;
+    color: white;
+    border-color: #3076a7;
+}
+
